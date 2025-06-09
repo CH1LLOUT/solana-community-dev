@@ -1,0 +1,418 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOLANA COMMUNITY DEVS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000000;
+            color: #00ffff;
+            font-family: 'Press Start 2P', monospace;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+            font-size: 12px;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(0, 255, 255, 0.05) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        /* Matrix rain effect */
+        .matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .matrix-column {
+            position: absolute;
+            top: -100px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #9333ea;
+            animation: matrix-fall linear infinite;
+        }
+
+        @keyframes matrix-fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+
+        /* Main container */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Main title without glitch effects */
+        .main-title {
+            font-size: clamp(1.5rem, 6vw, 4rem);
+            font-weight: normal;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            color: #00ffff;
+            text-shadow: 
+                2px 2px 0px #000000,
+                0 0 10px #00ffff;
+            letter-spacing: 2px;
+            font-family: 'Press Start 2P', monospace;
+        }
+
+        /* Terminal-style list container */
+        .terminal {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #9333ea;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 
+                0 0 20px rgba(147, 51, 234, 0.5),
+                inset 0 0 20px rgba(147, 51, 234, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .terminal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(90deg, #9333ea, #7c3aed);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .terminal-header {
+            color: #ffffff;
+            font-size: 14px;
+            position: absolute;
+            top: 8px;
+            left: 15px;
+            font-weight: bold;
+        }
+
+        .terminal-buttons {
+            position: absolute;
+            top: 8px;
+            right: 15px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff5f57;
+        }
+
+        .terminal-button:nth-child(2) {
+            background: #ffbd2e;
+        }
+
+        .terminal-button:nth-child(3) {
+            background: #28ca42;
+        }
+
+        .terminal-content {
+            margin-top: 40px;
+        }
+
+        .command-prompt {
+            color: #00ffff;
+            font-family: 'Press Start 2P', monospace;
+            margin-bottom: 20px;
+            animation: blink 1s infinite;
+            font-size: 10px;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .dev-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .dev-list li {
+            color: #00ffff;
+            font-size: 10px;
+            margin: 15px 0;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(147, 51, 234, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Press Start 2P', monospace;
+            line-height: 1.4;
+        }
+
+        .dev-list li::before {
+            content: '> ';
+            color: #9333ea;
+            font-weight: bold;
+        }
+
+        .dev-list li:hover {
+            color: #87ceeb;
+            text-shadow: 0 0 10px #87ceeb;
+            transform: translateX(10px);
+            background: rgba(147, 51, 234, 0.1);
+        }
+
+        .dev-list li:hover::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: linear-gradient(180deg, #9333ea, #00ffff);
+            animation: slide-in 0.3s ease;
+        }
+
+        @keyframes slide-in {
+            from {
+                height: 0;
+            }
+            to {
+                height: 100%;
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 1.2rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .terminal {
+                margin: 0 10px;
+                padding: 20px;
+            }
+            
+            .dev-list li {
+                font-size: 8px;
+            }
+            
+            .footer-text {
+                font-size: 6px;
+            }
+            
+            .social-icons {
+                top: 10px;
+                right: 10px;
+            }
+            
+            .social-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 10px;
+            }
+        }
+
+        /* Additional neon effects */
+        .neon-border {
+            position: relative;
+        }
+
+        .neon-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #9333ea, #00ffff, #ff00ff, #9333ea);
+            border-radius: 12px;
+            z-index: -1;
+            animation: rotate-border 3s linear infinite;
+        }
+
+        @keyframes rotate-border {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Social media icons */
+        .social-icons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #9333ea;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00ffff;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(147, 51, 234, 0.3);
+        }
+
+        .social-icon:hover {
+            border-color: #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            transform: scale(1.1);
+        }
+
+        /* Small footer text */
+        .footer-text {
+            margin-top: 20px;
+            font-size: 8px;
+            color: #666666;
+            text-align: center;
+            line-height: 1.4;
+            max-width: 500px;
+            font-family: 'Press Start 2P', monospace;
+        }
+    </style>
+</head>
+<body>
+    <!-- Matrix rain effect -->
+    <div class="matrix" id="matrix"></div>
+
+    <!-- Social media icons -->
+    <div class="social-icons">
+        <a href="https://x.com/ch1lloutqq" target="_blank" class="social-icon" title="X (Twitter)">
+            X
+        </a>
+        <a href="https://pump.fun/coin/" target="_blank" class="social-icon" title="Pump.fun">
+            PF
+        </a>
+    </div>
+
+    <div class="container">
+        <h1 class="main-title">SOLANA COMMUNITY DEVS</h1>
+        
+        <div class="terminal neon-border">
+            <div class="terminal-header">terminal.exe</div>
+            <div class="terminal-buttons">
+                <div class="terminal-button"></div>
+                <div class="terminal-button"></div>
+                <div class="terminal-button"></div>
+            </div>
+            
+            <div class="terminal-content">
+                <div class="command-prompt">root@solana:~$ ls -la developers/</div>
+                
+                <ul class="dev-list">
+                    <li>UY__2 - tier#1</li>
+                    <li>M4XED_OUT - tier#1</li>
+                    <li>Bancrypto__ - tier#1</li>
+                    <li>tradeskii - tier#1</li>
+                    <li>og99official - tier#2</li>
+                    <li>notindiandotsol - tier#2</li>
+                </ul>
+                
+                <div class="footer-text">
+                    This list was created by me and only tier 1 devs I found in a couple weeks, unfortunately no one wrote me, but if anyone wants to I'm all for it
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Matrix rain effect
+        function createMatrix() {
+            const matrix = document.getElementById('matrix');
+            const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+            
+            for (let i = 0; i < 50; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-column';
+                column.style.left = Math.random() * 100 + '%';
+                column.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                column.style.animationDelay = Math.random() * 2 + 's';
+                
+                let text = '';
+                for (let j = 0; j < 20; j++) {
+                    text += chars[Math.floor(Math.random() * chars.length)] + '<br>';
+                }
+                column.innerHTML = text;
+                
+                matrix.appendChild(column);
+            }
+        }
+
+        // Initialize matrix effect
+        createMatrix();
+
+        // Add some interactive effects
+        document.addEventListener('mousemove', (e) => {
+            const cursor = document.createElement('div');
+            cursor.style.position = 'fixed';
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursor.style.width = '3px';
+            cursor.style.height = '3px';
+            cursor.style.background = '#00ffff';
+            cursor.style.borderRadius = '50%';
+            cursor.style.pointerEvents = 'none';
+            cursor.style.zIndex = '9999';
+            cursor.style.boxShadow = '0 0 10px #00ffff';
+            
+            document.body.appendChild(cursor);
+            
+            setTimeout(() => {
+                cursor.remove();
+            }, 100);
+        });
+    </script>
+</body>
+</html>
